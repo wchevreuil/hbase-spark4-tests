@@ -1,0 +1,5 @@
+disable 'dengue' if exists 'dengue'
+drop 'dengue' if exists 'dengue'
+create 'dengue', {NAME => 'cf', VERSIONS => 1}
+list
+exit

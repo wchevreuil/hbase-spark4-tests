@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: zookeeper:3.8
+    container_name: zookeeper
+    hostname: zookeeper
+    networks:
+      - hbase-net
+
+  hbase-master:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hbase-master
+    hostname: hbase-master
+    ports:
+      - "16010:16010"
+    depends_on:
+      - zookeeper
+    command: ["/opt/hbase/bin/hbase", "master", "start"]
+    volumes:
+      - hbase-data:/root/hbase-data
+    networks:
+      - hbase-net
+
+  hbase-regionserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hbase-regionserver
+    hostname: hbase-regionserver
+    depends_on:
+      - hbase-master
+    # Sleep to let the master initialize before starting the regionserver
+    command: >
+      sh -c "sleep 20 && /opt/hbase/bin/hbase regionserver start"
+    volumes:
+      - hbase-data:/root/hbase-data
+    networks:
+      - hbase-net
+
+  spark-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spark4-worker
+    hostname: spark4-worker
+    depends_on:
+      - hbase-regionserver
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+    volumes:
+      - "./Dengue_diseases_dataset_modified (1).csv:/data/dengue.csv:ro"
+      - "./scripts:/scripts"
+    networks:
+      - hbase-net
+
+volumes:
+  hbase-data:
+
+networks:
+  hbase-net:
+    driver: bridge

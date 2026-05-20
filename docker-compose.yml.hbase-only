@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: zookeeper:3.8
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+
+  hbase-master:
+    image: hbase-spark-test:2.6.2
+    container_name: hbase-master
+    hostname: hbase-master
+    ports:
+      - "16010:16010" # Master Web UI
+    environment:
+      - HBASE_CONF_hbase_cluster_distributed=true
+      - HBASE_CONF_hbase_zookeeper_quorum=zookeeper
+    depends_on:
+      - zookeeper
+
+  hbase-regionserver:
+    image: hbase-spark-test:2.6.2
+    container_name: hbase-regionserver
+    environment:
+      - HBASE_CONF_hbase_cluster_distributed=true
+      - HBASE_CONF_hbase_zookeeper_quorum=zookeeper
+    depends_on:
+      - hbase-master

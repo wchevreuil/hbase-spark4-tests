@@ -1,0 +1,34 @@
+<configuration>
+  <property>
+    <name>hbase.rootdir</name>
+    <value>file:///root/hbase-data</value>
+  </property>
+  <property>
+    <name>hbase.cluster.distributed</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>hbase.zookeeper.quorum</name>
+    <value>zookeeper</value>
+  </property>
+  <property>
+    <name>hbase.zookeeper.property.clientPort</name>
+    <value>2181</value>
+  </property>
+  <property>
+    <name>hbase.wal.provider</name>
+    <value>filesystem</value>
+  </property>
+  <property>
+    <name>hbase.unsafe.stream.capability.enforce</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>hbase.unsafe.regionserver.hostname.disable.master.reversedns</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>hbase.status.published</name>
+    <value>false</value>
+  </property>
+</configuration>

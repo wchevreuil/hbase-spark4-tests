@@ -1,0 +1,24 @@
+# Using Eclipse Temurin for Java 11
+FROM eclipse-temurin:11-jre
+
+# Set environment variables
+ENV HBASE_VERSION=2.6.2
+ENV HBASE_HOME=/opt/hbase
+ENV PATH=$PATH:$HBASE_HOME/bin
+
+# Install dependencies
+RUN apt-get update && apt-get install -y wget procps && rm -rf /var/lib/apt/lists/*
+
+# Download and extract HBase
+RUN wget https://archive.apache.org/dist/hbase/$HBASE_VERSION/hbase-$HBASE_VERSION-bin.tar.gz && \
+    tar -xzf hbase-$HBASE_VERSION-bin.tar.gz -C /opt && \
+    mv /opt/hbase-$HBASE_VERSION $HBASE_HOME && \
+    rm hbase-$HBASE_VERSION-bin.tar.gz
+
+# Add a basic pseudo-distributed config (optional - can also mount via volumes)
+WORKDIR $HBASE_HOME
+
+# Expose Web UI and Master ports
+EXPOSE 16010 16000 16020 16030 2181
+
+CMD ["bin/hbase", "master", "start"]
