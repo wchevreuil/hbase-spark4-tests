@@ -1,0 +1,5 @@
+# Ignore IntelliJ / PyCharm / WebStorm configuration folder
+.idea/
+
+# Ignore local library folder
+lib/
