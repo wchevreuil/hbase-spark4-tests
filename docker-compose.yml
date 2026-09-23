@@ -54,6 +54,8 @@ services:
     volumes:
       - "./Dengue_diseases_dataset_modified (1).csv:/data/dengue.csv:ro"
       - "./scripts:/scripts"
+      - "./streaming-dir:/data/stream/input"
+      - "./chkpt:/data/stream/checkpoint"
     networks:
       - hbase-net
 
